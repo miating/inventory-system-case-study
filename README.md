@@ -44,7 +44,7 @@ The private application uses Next.js, React, TypeScript, server-side actions, st
 
 ## Public Demo
 
-Open `demo.html`. Every company name, customer, supplier, item, quantity, and reference number is fictional.
+Open `demo.html`. It is interactive and offline: the sidebar switches between nine modules, every list supports search and filtering, and selecting a row opens its detail. Every company name, customer, supplier, item, quantity, and reference number is fictional.
 
 ## Why the Source Is Private
 

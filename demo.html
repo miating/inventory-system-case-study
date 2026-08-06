@@ -1,30 +1,400 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Inventory Management System - Case Study Demo</title>
-  <style>
-    *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:#f5f7f9;color:#17212b}.shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
-    aside{background:#fff;border-right:1px solid #dce2e7;padding:20px 14px}.brand{font-size:15px;font-weight:750;padding:4px 8px 22px}.group{font-size:10px;color:#87939d;text-transform:uppercase;margin:17px 8px 6px}
-    .nav{display:block;width:100%;border:0;background:transparent;text-align:left;padding:8px 10px;border-radius:5px;color:#52616d;font-size:13px;cursor:pointer}.nav.active{background:#e9f0fb;color:#245aaa;font-weight:700}
-    main{padding:26px;min-width:0}.top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}.eyebrow{font-size:12px;color:#6c7983;margin:0}.top h1{font-size:25px;margin:4px 0 0}.tag{font-size:12px;color:#286044;background:#e7f5ed;border:1px solid #c5e6d2;padding:6px 9px;border-radius:5px}
-    .stats{display:grid;grid-template-columns:repeat(5,minmax(125px,1fr));gap:10px;margin:20px 0}.stat{background:#fff;border:1px solid #dce2e7;border-radius:6px;padding:14px}.label{font-size:11px;color:#71808b}.value{font-size:24px;font-weight:750;margin-top:7px;color:#1e4f9a}
-    .band{background:#fff;border:1px solid #dce2e7;border-radius:6px;margin-top:12px;overflow:hidden}.head{padding:14px 16px;border-bottom:1px solid #e4e8eb;display:flex;justify-content:space-between;align-items:center}.head h2{font-size:14px;margin:0}.head span{font-size:11px;color:#75818a}
-    table{border-collapse:collapse;width:100%;font-size:12px}th,td{padding:11px 15px;text-align:left;border-bottom:1px solid #edf0f2;white-space:nowrap}th{background:#fafbfc;color:#65727c}.status{font-weight:700}.processing{color:#a26315}.ready{color:#24734f}.waiting{color:#3766ad}
-    .modules{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}.module{border:1px solid #dce2e7;background:#fff;border-radius:6px;padding:14px;min-height:88px}.module h3{font-size:13px;margin:0 0 6px}.module p{font-size:11px;line-height:1.5;color:#71808b;margin:0}
-    @media(max-width:880px){.shell{display:block}aside{display:none}main{padding:20px 13px}.stats{grid-template-columns:repeat(2,1fr)}.modules{grid-template-columns:repeat(2,1fr)}.band{overflow-x:auto}.top{align-items:flex-start;flex-direction:column}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inventory Management System - Interactive Case Study Demo</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,"Segoe UI",sans-serif;background:#f5f7f9;color:#17212b}
+  .shell{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
+  aside{background:#fff;border-right:1px solid #dce2e7;padding:18px 12px;overflow-y:auto}
+  .brand{font-size:15px;font-weight:750;padding:4px 8px}
+  .brand small{display:block;font-weight:500;color:#8b96a0;font-size:11px;margin-top:3px}
+  .group{font-size:10px;color:#8b96a0;text-transform:uppercase;letter-spacing:.06em;margin:16px 8px 6px}
+  .nav{display:block;width:100%;border:0;background:transparent;text-align:left;padding:8px 10px;border-radius:5px;color:#52616d;font-size:13px;cursor:pointer;font-family:inherit}
+  .nav:hover{background:#f1f5f9;color:#1d2b38}
+  .nav.active{background:#e9f0fb;color:#245aaa;font-weight:700}
+  main{padding:24px 26px 60px;min-width:0}
+  .top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+  .eyebrow{font-size:12px;color:#6c7983;margin:0}
+  .top h1{font-size:24px;margin:4px 0 0}
+  .tag{font-size:12px;color:#286044;background:#e7f5ed;border:1px solid #c5e6d2;padding:6px 9px;border-radius:5px;white-space:nowrap}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:18px 0}
+  .stat{background:#fff;border:1px solid #dce2e7;border-radius:6px;padding:14px}
+  .label{font-size:11px;color:#71808b}
+  .value{font-size:23px;font-weight:750;margin-top:6px;color:#1e4f9a}
+  .band{background:#fff;border:1px solid #dce2e7;border-radius:6px;margin-top:12px;overflow:hidden}
+  .head{padding:13px 16px;border-bottom:1px solid #e4e8eb;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .head h2{font-size:14px;margin:0}
+  .head .sub{font-size:11px;color:#75818a}
+  .toolbar{display:flex;gap:8px;padding:12px 16px;border-bottom:1px solid #eef1f3;flex-wrap:wrap;align-items:center}
+  input[type=search],select{font:inherit;font-size:13px;padding:7px 10px;border:1px solid #d3dadf;border-radius:5px;background:#fff;color:inherit}
+  input[type=search]{min-width:210px}
+  .btn{font:inherit;font-size:13px;padding:7px 13px;border-radius:5px;border:1px solid #2c6ac4;background:#2c6ac4;color:#fff;cursor:pointer}
+  .btn.ghost{background:#fff;color:#41505c;border-color:#d3dadf}
+  .btn:hover{filter:brightness(.96)}
+  .wrap{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;font-size:12.5px}
+  th,td{padding:10px 15px;text-align:left;border-bottom:1px solid #edf0f2;white-space:nowrap}
+  th{background:#fafbfc;color:#65727c;font-weight:600;font-size:11.5px}
+  tbody tr{cursor:pointer}
+  tbody tr:hover{background:#f6f9fd}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .pill{display:inline-block;padding:2px 8px;border-radius:11px;font-size:11px;font-weight:700}
+  .p-processing{background:#fdf1e0;color:#9a5d12}
+  .p-ready{background:#e4f4ec;color:#1d6b49}
+  .p-waiting{background:#e8effa;color:#2f5ea8}
+  .p-done{background:#eef1f3;color:#5c6871}
+  .p-low{background:#fdeaea;color:#a33131}
+  .modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px;margin-top:12px}
+  .module{border:1px solid #dce2e7;background:#fff;border-radius:6px;padding:14px}
+  .module h3{font-size:13px;margin:0 0 6px}
+  .module p{font-size:11.5px;line-height:1.55;color:#71808b;margin:0}
+  .empty{padding:26px 16px;text-align:center;color:#8b96a0;font-size:13px}
+  .banner{background:#eef4fd;border:1px solid #cfdff5;color:#2c527f;font-size:12px;padding:9px 13px;border-radius:6px;margin-bottom:16px;line-height:1.55}
+  dialog{border:0;border-radius:9px;padding:0;width:min(520px,92vw);box-shadow:0 18px 48px rgba(15,32,52,.24)}
+  dialog::backdrop{background:rgba(15,26,38,.42)}
+  .d-head{padding:16px 20px;border-bottom:1px solid #e9edf0;display:flex;justify-content:space-between;align-items:center}
+  .d-head h3{margin:0;font-size:15px}
+  .d-body{padding:16px 20px}
+  .d-body dl{display:grid;grid-template-columns:130px 1fr;gap:9px 14px;margin:0;font-size:13px}
+  .d-body dt{color:#75818a}
+  .d-body dd{margin:0;font-weight:600}
+  .d-foot{padding:13px 20px;border-top:1px solid #e9edf0;display:flex;justify-content:flex-end;gap:8px}
+  .x{border:0;background:transparent;font-size:20px;line-height:1;cursor:pointer;color:#8b96a0}
+  .mobile-nav{display:none}
+  @media(max-width:900px){
+    .shell{display:block}
+    aside{display:none}
+    main{padding:18px 13px 50px}
+    .mobile-nav{display:block;margin:12px 0}
+    .mobile-nav select{width:100%}
+    .top{align-items:flex-start;flex-direction:column}
+  }
+</style>
 </head>
 <body>
-  <div class="shell">
-    <aside><div class="brand">Inventory Operations</div><div class="group">Overview</div><button class="nav active">Dashboard</button><div class="group">Orders and Sales</div><button class="nav">Orders</button><button class="nav">Shipping</button><button class="nav">Statements</button><div class="group">Warehouse</div><button class="nav">Stock In</button><button class="nav">Stock Out</button><button class="nav">Inventory</button><div class="group">Master Data</div><button class="nav">Products</button><button class="nav">Customers</button><button class="nav">Suppliers</button></aside>
-    <main>
-      <header class="top"><div><p class="eyebrow">Production system case study</p><h1>Inventory and Shipping Overview</h1></div><span class="tag">Anonymous offline demo</span></header>
-      <section class="stats"><div class="stat"><div class="label">Pending Orders</div><div class="value">8</div></div><div class="stat"><div class="label">Stock In Today</div><div class="value">12</div></div><div class="stat"><div class="label">Stock Out Today</div><div class="value">9</div></div><div class="stat"><div class="label">Total Items</div><div class="value">126</div></div><div class="stat"><div class="label">Suppliers</div><div class="value">18</div></div></section>
-      <section class="modules"><div class="module"><h3>Order Management</h3><p>Create orders and track processing and shipment status.</p></div><div class="module"><h3>Purchase Orders</h3><p>Coordinate supplier orders, due dates, and receipts.</p></div><div class="module"><h3>Inventory Movements</h3><p>Record stock in, stock out, reasons, and balances.</p></div><div class="module"><h3>Process Tracking</h3><p>Follow production and refurbishment steps.</p></div></section>
-      <section class="band"><div class="head"><h2>Recent Operational Records</h2><span>Fictional data only</span></div><table><thead><tr><th>Reference</th><th>Party</th><th>Item</th><th>Quantity</th><th>Status</th><th>Date</th></tr></thead><tbody><tr><td>SO-DEMO-001</td><td>Demo Customer A</td><td>Demo Product A</td><td>12</td><td class="status processing">Processing</td><td>2026-08-03</td></tr><tr><td>SO-DEMO-002</td><td>Demo Customer B</td><td>Demo Product B</td><td>6</td><td class="status ready">Ready to Ship</td><td>2026-08-05</td></tr><tr><td>PO-DEMO-003</td><td>Demo Supplier C</td><td>Demo Part C</td><td>40</td><td class="status waiting">Awaiting Receipt</td><td>2026-08-07</td></tr></tbody></table></section>
-    </main>
-  </div>
+<div class="shell">
+  <aside>
+    <div class="brand">Inventory Operations<small>Anonymous demo build</small></div>
+    <div id="sidenav"></div>
+  </aside>
+  <main>
+    <div class="banner">Interactive offline demo. The navigation, search, filters and record details below all work; every company, party, item, quantity and reference number is fictional. No network request is made and the production source code is not included.</div>
+    <header class="top">
+      <div>
+        <p class="eyebrow">Production system case study</p>
+        <h1 id="page-title">Inventory and Shipping Overview</h1>
+      </div>
+      <span class="tag">Anonymous offline demo</span>
+    </header>
+    <div class="mobile-nav"><select id="mobilenav" aria-label="Select module"></select></div>
+    <div id="view"></div>
+  </main>
+</div>
+
+<dialog id="detail">
+  <div class="d-head"><h3 id="d-title">Record</h3><button class="x" id="d-x" aria-label="Close">&times;</button></div>
+  <div class="d-body"><dl id="d-body"></dl></div>
+  <div class="d-foot"><button class="btn ghost" id="d-close">Close</button></div>
+</dialog>
+
+<script>
+// ---------------------------------------------------------------------------
+// Fictional data. The module structure mirrors the private production system.
+// ---------------------------------------------------------------------------
+const ORDERS = [
+  { ref:'SO-DEMO-001', party:'Demo Customer A', item:'Demo Product A', qty:12, status:'Processing', date:'2026-08-03', owner:'Demo Sales 1', note:'Awaiting production step 2' },
+  { ref:'SO-DEMO-002', party:'Demo Customer B', item:'Demo Product B', qty:6,  status:'Ready to Ship', date:'2026-08-05', owner:'Demo Sales 2', note:'Packed, pending carrier pickup' },
+  { ref:'SO-DEMO-004', party:'Demo Customer C', item:'Demo Product C', qty:24, status:'Processing', date:'2026-08-05', owner:'Demo Sales 1', note:'Partial materials reserved' },
+  { ref:'SO-DEMO-005', party:'Demo Customer A', item:'Demo Product D', qty:3,  status:'Completed', date:'2026-07-29', owner:'Demo Sales 3', note:'Delivered and invoiced' },
+  { ref:'SO-DEMO-006', party:'Demo Customer D', item:'Demo Product A', qty:18, status:'Ready to Ship', date:'2026-08-06', owner:'Demo Sales 2', note:'' },
+];
+const PURCHASES = [
+  { ref:'PO-DEMO-003', party:'Demo Supplier C', item:'Demo Part C', qty:40,  status:'Awaiting Receipt', date:'2026-08-07', owner:'Demo Buyer 1', note:'Split delivery agreed' },
+  { ref:'PO-DEMO-007', party:'Demo Supplier D', item:'Demo Part D', qty:120, status:'Awaiting Receipt', date:'2026-08-09', owner:'Demo Buyer 1', note:'' },
+  { ref:'PO-DEMO-008', party:'Demo Supplier C', item:'Demo Part A', qty:60,  status:'Completed', date:'2026-07-31', owner:'Demo Buyer 2', note:'Received in full' },
+];
+const MOVEMENTS = [
+  { ref:'IN-DEMO-114',  type:'Stock In',  item:'Demo Part A',    qty:60, reason:'Purchase receipt',  date:'2026-08-06', party:'Demo Supplier C' },
+  { ref:'OUT-DEMO-208', type:'Stock Out', item:'Demo Product A', qty:12, reason:'Sales shipment',    date:'2026-08-06', party:'Demo Customer A' },
+  { ref:'OUT-DEMO-209', type:'Stock Out', item:'Demo Part B',    qty:8,  reason:'Production issue',  date:'2026-08-05', party:'Internal' },
+  { ref:'IN-DEMO-113',  type:'Stock In',  item:'Demo Product B', qty:20, reason:'Production output', date:'2026-08-05', party:'Internal' },
+  { ref:'OUT-DEMO-207', type:'Stock Out', item:'Demo Part C',    qty:15, reason:'Refurbishment',     date:'2026-08-04', party:'Internal' },
+];
+const INVENTORY = [
+  { code:'ITM-DEMO-001', item:'Demo Product A', category:'Finished goods', onHand:48,  reserved:12, reorder:20 },
+  { code:'ITM-DEMO-002', item:'Demo Product B', category:'Finished goods', onHand:26,  reserved:6,  reorder:15 },
+  { code:'ITM-DEMO-003', item:'Demo Product C', category:'Finished goods', onHand:9,   reserved:24, reorder:25 },
+  { code:'ITM-DEMO-010', item:'Demo Part A',    category:'Component',      onHand:180, reserved:40, reorder:80 },
+  { code:'ITM-DEMO-011', item:'Demo Part B',    category:'Component',      onHand:34,  reserved:8,  reorder:60 },
+  { code:'ITM-DEMO-012', item:'Demo Part C',    category:'Component',      onHand:210, reserved:15, reorder:100 },
+];
+const PROCESS = [
+  { ref:'SO-DEMO-001', item:'Demo Product A', step:'Assembly',   owner:'Demo Operator 1', status:'Processing', date:'2026-08-04' },
+  { ref:'SO-DEMO-004', item:'Demo Product C', step:'Machining',  owner:'Demo Operator 2', status:'Processing', date:'2026-08-05' },
+  { ref:'SO-DEMO-002', item:'Demo Product B', step:'Inspection', owner:'Demo Operator 3', status:'Completed',  date:'2026-08-05' },
+  { ref:'SO-DEMO-006', item:'Demo Product A', step:'Packing',    owner:'Demo Operator 1', status:'Completed',  date:'2026-08-06' },
+];
+const STATEMENTS = [
+  { ref:'ST-DEMO-2026-07A', party:'Demo Customer A', period:'2026-07', orders:4, amount:186400, status:'Completed' },
+  { ref:'ST-DEMO-2026-07B', party:'Demo Customer B', period:'2026-07', orders:2, amount:74200,  status:'Waiting' },
+  { ref:'ST-DEMO-2026-08A', party:'Demo Customer C', period:'2026-08', orders:3, amount:132900, status:'Processing' },
+];
+const PARTIES = [
+  { code:'CU-DEMO-01', name:'Demo Customer A', kind:'Customer', contact:'Demo Contact', terms:'Net 30', open:3 },
+  { code:'CU-DEMO-02', name:'Demo Customer B', kind:'Customer', contact:'Demo Contact', terms:'Net 45', open:1 },
+  { code:'CU-DEMO-03', name:'Demo Customer C', kind:'Customer', contact:'Demo Contact', terms:'Net 30', open:2 },
+  { code:'SU-DEMO-01', name:'Demo Supplier C', kind:'Supplier', contact:'Demo Contact', terms:'Net 30', open:2 },
+  { code:'SU-DEMO-02', name:'Demo Supplier D', kind:'Supplier', contact:'Demo Contact', terms:'Net 60', open:1 },
+];
+
+const PILL = { 'Processing':'p-processing','Ready to Ship':'p-ready','Awaiting Receipt':'p-waiting',
+               'Completed':'p-done','Waiting':'p-waiting' };
+const money = (n) => '$' + n.toLocaleString('en-US');
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+const statusCell = (r) => `<span class="pill ${PILL[r.status] || 'p-done'}">${esc(r.status)}</span>`;
+
+function statCards(cards) {
+  return '<section class="stats">' + cards.map(c =>
+    `<div class="stat"><div class="label">${esc(c[0])}</div><div class="value">${esc(c[1])}</div></div>`).join('')
+    + '</section>';
+}
+
+// Renders a searchable, filterable, clickable table and returns nothing.
+function list(opts) {
+  const { title, sub, columns, rows, filter, onRow, before = '' } = opts;
+  const filterHtml = filter
+    ? `<select id="f"><option value="">${esc(filter.label)}</option>` +
+      filter.options.map(o => `<option>${esc(o)}</option>`).join('') + '</select>'
+    : '';
+  document.getElementById('view').innerHTML = before + `
+    <section class="band">
+      <div class="head"><h2>${esc(title)}</h2><span class="sub">${esc(sub)}</span></div>
+      <div class="toolbar">
+        <input type="search" id="q" placeholder="Search this list…" autocomplete="off">
+        ${filterHtml}
+        <button class="btn ghost" id="reset">Reset</button>
+        <span class="sub" id="count"></span>
+      </div>
+      <div class="wrap"><table>
+        <thead><tr>${columns.map(c => `<th${c.num ? ' class="num"' : ''}>${esc(c.label)}</th>`).join('')}</tr></thead>
+        <tbody id="tbody"></tbody>
+      </table></div>
+    </section>`;
+
+  const q = document.getElementById('q');
+  const f = document.getElementById('f');
+  const tbody = document.getElementById('tbody');
+  const count = document.getElementById('count');
+
+  function apply() {
+    const term = q.value.trim().toLowerCase();
+    const fv = f ? f.value : '';
+    const shown = rows.filter(r => {
+      const hay = Object.values(r).join(' ').toLowerCase();
+      return (!term || hay.includes(term)) && (!fv || String(r[filter.key]) === fv);
+    });
+    count.textContent = shown.length + ' of ' + rows.length + ' records';
+    if (!shown.length) {
+      tbody.innerHTML = `<tr><td colspan="${columns.length}"><div class="empty">No records match the current search or filter.</div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = shown.map((r, i) => `<tr data-i="${i}">` +
+      columns.map(c => `<td${c.num ? ' class="num"' : ''}>${c.render ? c.render(r) : esc(r[c.key])}</td>`).join('') +
+      '</tr>').join('');
+    tbody.querySelectorAll('tr[data-i]').forEach(tr =>
+      tr.addEventListener('click', () => onRow(shown[Number(tr.dataset.i)])));
+  }
+  q.addEventListener('input', apply);
+  if (f) f.addEventListener('change', apply);
+  document.getElementById('reset').addEventListener('click', () => { q.value = ''; if (f) f.value = ''; apply(); });
+  apply();
+}
+
+const dialog = document.getElementById('detail');
+function openDetail(title, pairs) {
+  document.getElementById('d-title').textContent = title;
+  document.getElementById('d-body').innerHTML = pairs
+    .map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v === '' || v == null ? '—' : v)}</dd>`).join('');
+  dialog.showModal();
+}
+document.getElementById('d-x').addEventListener('click', () => dialog.close());
+document.getElementById('d-close').addEventListener('click', () => dialog.close());
+
+const VIEWS = {
+  dashboard: { group:'Overview', label:'Dashboard', title:'Inventory and Shipping Overview', render() {
+    const all = ORDERS.concat(PURCHASES);
+    list({
+      title:'Recent Operational Records', sub:'Select any row to open its detail',
+      before: statCards([
+        ['Open Orders', ORDERS.filter(o => o.status !== 'Completed').length],
+        ['Stock In Today', MOVEMENTS.filter(m => m.type === 'Stock In' && m.date === '2026-08-06').length],
+        ['Stock Out Today', MOVEMENTS.filter(m => m.type === 'Stock Out' && m.date === '2026-08-06').length],
+        ['Tracked Items', INVENTORY.length],
+        ['Below Reorder Point', INVENTORY.filter(i => i.onHand < i.reorder).length],
+      ]) + `<section class="modules">
+        <div class="module"><h3>Order Management</h3><p>Create orders and track processing and shipment status.</p></div>
+        <div class="module"><h3>Purchase Orders</h3><p>Coordinate supplier orders, due dates, and receipts.</p></div>
+        <div class="module"><h3>Inventory Movements</h3><p>Record stock in, stock out, reasons, and balances.</p></div>
+        <div class="module"><h3>Process Tracking</h3><p>Follow production and refurbishment steps.</p></div>
+      </section>`,
+      columns:[{key:'ref',label:'Reference'},{key:'party',label:'Party'},{key:'item',label:'Item'},
+               {key:'qty',label:'Qty',num:true},{label:'Status',render:statusCell},{key:'date',label:'Date'}],
+      rows: all, filter:{ key:'status', label:'All statuses',
+        options:[...new Set(all.map(r => r.status))] },
+      onRow: r => openDetail(r.ref, [['Party',r.party],['Item',r.item],['Quantity',r.qty],
+        ['Status',r.status],['Date',r.date],['Owner',r.owner],['Note',r.note]]),
+    });
+  }},
+
+  orders: { group:'Orders and Sales', label:'Orders', title:'Sales Orders', render() {
+    list({
+      title:'Order List', sub:'Search or filter, then select a row',
+      before: statCards([['Total Orders', ORDERS.length],
+        ['Processing', ORDERS.filter(o => o.status === 'Processing').length],
+        ['Ready to Ship', ORDERS.filter(o => o.status === 'Ready to Ship').length],
+        ['Units Ordered', ORDERS.reduce((s, o) => s + o.qty, 0)]]),
+      columns:[{key:'ref',label:'Order'},{key:'party',label:'Customer'},{key:'item',label:'Item'},
+               {key:'qty',label:'Qty',num:true},{label:'Status',render:statusCell},
+               {key:'date',label:'Date'},{key:'owner',label:'Owner'}],
+      rows: ORDERS, filter:{ key:'status', label:'All statuses', options:['Processing','Ready to Ship','Completed'] },
+      onRow: r => openDetail(r.ref, [['Customer',r.party],['Item',r.item],['Quantity',r.qty],
+        ['Status',r.status],['Requested date',r.date],['Owner',r.owner],['Note',r.note]]),
+    });
+  }},
+
+  shipping: { group:'Orders and Sales', label:'Shipping', title:'Shipping Queue', render() {
+    const queue = ORDERS.filter(o => o.status !== 'Completed');
+    list({
+      title:'Shipment Preparation', sub:'Orders awaiting dispatch',
+      before: statCards([['In Queue', queue.length],
+        ['Ready to Ship', queue.filter(o => o.status === 'Ready to Ship').length],
+        ['Units Queued', queue.reduce((s, o) => s + o.qty, 0)]]),
+      columns:[{key:'ref',label:'Order'},{key:'party',label:'Ship to'},{key:'item',label:'Item'},
+               {key:'qty',label:'Qty',num:true},{label:'Status',render:statusCell},{key:'date',label:'Target date'}],
+      rows: queue, filter:{ key:'status', label:'All statuses', options:['Processing','Ready to Ship'] },
+      onRow: r => openDetail(r.ref, [['Ship to',r.party],['Item',r.item],['Quantity',r.qty],
+        ['Status',r.status],['Target date',r.date],['Note',r.note]]),
+    });
+  }},
+
+  statements: { group:'Orders and Sales', label:'Statements', title:'Customer Statements', render() {
+    list({
+      title:'Statement Periods', sub:'Printable statements are generated per customer and period',
+      before: statCards([['Statements', STATEMENTS.length],
+        ['Total Value', money(STATEMENTS.reduce((s, x) => s + x.amount, 0))],
+        ['Open', STATEMENTS.filter(s => s.status !== 'Completed').length]]),
+      columns:[{key:'ref',label:'Statement'},{key:'party',label:'Customer'},{key:'period',label:'Period'},
+               {key:'orders',label:'Orders',num:true},
+               {label:'Amount',num:true,render:r => money(r.amount)},{label:'Status',render:statusCell}],
+      rows: STATEMENTS, filter:{ key:'period', label:'All periods', options:['2026-07','2026-08'] },
+      onRow: r => openDetail(r.ref, [['Customer',r.party],['Period',r.period],
+        ['Orders included',r.orders],['Amount',money(r.amount)],['Status',r.status]]),
+    });
+  }},
+
+  purchases: { group:'Purchasing', label:'Purchase Orders', title:'Purchase Orders', render() {
+    list({
+      title:'Supplier Orders', sub:'Select a row for detail',
+      before: statCards([['Purchase Orders', PURCHASES.length],
+        ['Awaiting Receipt', PURCHASES.filter(p => p.status === 'Awaiting Receipt').length],
+        ['Units on Order', PURCHASES.reduce((s, p) => s + p.qty, 0)]]),
+      columns:[{key:'ref',label:'PO'},{key:'party',label:'Supplier'},{key:'item',label:'Part'},
+               {key:'qty',label:'Qty',num:true},{label:'Status',render:statusCell},{key:'date',label:'Due date'}],
+      rows: PURCHASES, filter:{ key:'status', label:'All statuses', options:['Awaiting Receipt','Completed'] },
+      onRow: r => openDetail(r.ref, [['Supplier',r.party],['Part',r.item],['Quantity',r.qty],
+        ['Status',r.status],['Due date',r.date],['Buyer',r.owner],['Note',r.note]]),
+    });
+  }},
+
+  movements: { group:'Warehouse', label:'Stock Movements', title:'Stock In and Stock Out', render() {
+    list({
+      title:'Movement Log', sub:'Filter by direction or search any field',
+      before: statCards([['Movements Logged', MOVEMENTS.length],
+        ['Stock In', MOVEMENTS.filter(m => m.type === 'Stock In').length],
+        ['Stock Out', MOVEMENTS.filter(m => m.type === 'Stock Out').length]]),
+      columns:[{key:'ref',label:'Reference'},{key:'type',label:'Direction'},{key:'item',label:'Item'},
+               {key:'qty',label:'Qty',num:true},{key:'reason',label:'Reason'},{key:'date',label:'Date'}],
+      rows: MOVEMENTS, filter:{ key:'type', label:'All movements', options:['Stock In','Stock Out'] },
+      onRow: r => openDetail(r.ref, [['Direction',r.type],['Item',r.item],['Quantity',r.qty],
+        ['Reason',r.reason],['Counterparty',r.party],['Date',r.date]]),
+    });
+  }},
+
+  inventory: { group:'Warehouse', label:'Inventory', title:'Inventory Levels', render() {
+    list({
+      title:'Stock Positions', sub:'Available = on hand − reserved',
+      before: statCards([['Tracked Items', INVENTORY.length],
+        ['Units on Hand', INVENTORY.reduce((s, i) => s + i.onHand, 0)],
+        ['Units Reserved', INVENTORY.reduce((s, i) => s + i.reserved, 0)],
+        ['Below Reorder Point', INVENTORY.filter(i => i.onHand < i.reorder).length]]),
+      columns:[{key:'code',label:'Code'},{key:'item',label:'Item'},{key:'category',label:'Category'},
+               {key:'onHand',label:'On hand',num:true},{key:'reserved',label:'Reserved',num:true},
+               {label:'Available',num:true,render:r => String(r.onHand - r.reserved)},
+               {label:'Level',render:r => r.onHand < r.reorder
+                 ? '<span class="pill p-low">Below reorder</span>'
+                 : '<span class="pill p-ready">Adequate</span>'}],
+      rows: INVENTORY, filter:{ key:'category', label:'All categories', options:['Finished goods','Component'] },
+      onRow: r => openDetail(r.item, [['Code',r.code],['Category',r.category],['On hand',r.onHand],
+        ['Reserved',r.reserved],['Available',r.onHand - r.reserved],['Reorder point',r.reorder]]),
+    });
+  }},
+
+  process: { group:'Production', label:'Process Tracking', title:'Process Tracking', render() {
+    list({
+      title:'Production Steps', sub:'Each order moves through routed steps',
+      before: statCards([['Tracked Steps', PROCESS.length],
+        ['In Progress', PROCESS.filter(p => p.status === 'Processing').length],
+        ['Completed', PROCESS.filter(p => p.status === 'Completed').length]]),
+      columns:[{key:'ref',label:'Order'},{key:'item',label:'Item'},{key:'step',label:'Step'},
+               {key:'owner',label:'Operator'},{label:'Status',render:statusCell},{key:'date',label:'Updated'}],
+      rows: PROCESS, filter:{ key:'step', label:'All steps', options:['Assembly','Machining','Inspection','Packing'] },
+      onRow: r => openDetail(r.ref + ' · ' + r.step, [['Item',r.item],['Step',r.step],
+        ['Operator',r.owner],['Status',r.status],['Updated',r.date]]),
+    });
+  }},
+
+  parties: { group:'Master Data', label:'Customers and Suppliers', title:'Master Data', render() {
+    list({
+      title:'Parties', sub:'Master data drives orders, purchasing and statements',
+      before: statCards([['Records', PARTIES.length],
+        ['Customers', PARTIES.filter(p => p.kind === 'Customer').length],
+        ['Suppliers', PARTIES.filter(p => p.kind === 'Supplier').length]]),
+      columns:[{key:'code',label:'Code'},{key:'name',label:'Name'},{key:'kind',label:'Type'},
+               {key:'contact',label:'Contact'},{key:'terms',label:'Terms'},{key:'open',label:'Open docs',num:true}],
+      rows: PARTIES, filter:{ key:'kind', label:'All types', options:['Customer','Supplier'] },
+      onRow: r => openDetail(r.name, [['Code',r.code],['Type',r.kind],['Contact',r.contact],
+        ['Payment terms',r.terms],['Open documents',r.open]]),
+    });
+  }},
+};
+
+const keys = Object.keys(VIEWS);
+const sidenav = document.getElementById('sidenav');
+const mobilenav = document.getElementById('mobilenav');
+let lastGroup = null;
+sidenav.innerHTML = keys.map(k => {
+  const v = VIEWS[k];
+  const header = v.group !== lastGroup ? `<div class="group">${esc(v.group)}</div>` : '';
+  lastGroup = v.group;
+  return header + `<button class="nav" data-k="${k}">${esc(v.label)}</button>`;
+}).join('');
+mobilenav.innerHTML = keys.map(k => `<option value="${k}">${esc(VIEWS[k].group)} — ${esc(VIEWS[k].label)}</option>`).join('');
+
+function show(k) {
+  document.getElementById('page-title').textContent = VIEWS[k].title;
+  sidenav.querySelectorAll('.nav').forEach(b => b.classList.toggle('active', b.dataset.k === k));
+  mobilenav.value = k;
+  VIEWS[k].render();
+}
+sidenav.addEventListener('click', e => {
+  const b = e.target.closest('.nav');
+  if (b) show(b.dataset.k);
+});
+mobilenav.addEventListener('change', () => show(mobilenav.value));
+show('dashboard');
+</script>
 </body>
 </html>

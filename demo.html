@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inventory Management System - Case Study Demo</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:#f5f7f9;color:#17212b}.shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+    aside{background:#fff;border-right:1px solid #dce2e7;padding:20px 14px}.brand{font-size:15px;font-weight:750;padding:4px 8px 22px}.group{font-size:10px;color:#87939d;text-transform:uppercase;margin:17px 8px 6px}
+    .nav{display:block;width:100%;border:0;background:transparent;text-align:left;padding:8px 10px;border-radius:5px;color:#52616d;font-size:13px;cursor:pointer}.nav.active{background:#e9f0fb;color:#245aaa;font-weight:700}
+    main{padding:26px;min-width:0}.top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}.eyebrow{font-size:12px;color:#6c7983;margin:0}.top h1{font-size:25px;margin:4px 0 0}.tag{font-size:12px;color:#286044;background:#e7f5ed;border:1px solid #c5e6d2;padding:6px 9px;border-radius:5px}
+    .stats{display:grid;grid-template-columns:repeat(5,minmax(125px,1fr));gap:10px;margin:20px 0}.stat{background:#fff;border:1px solid #dce2e7;border-radius:6px;padding:14px}.label{font-size:11px;color:#71808b}.value{font-size:24px;font-weight:750;margin-top:7px;color:#1e4f9a}
+    .band{background:#fff;border:1px solid #dce2e7;border-radius:6px;margin-top:12px;overflow:hidden}.head{padding:14px 16px;border-bottom:1px solid #e4e8eb;display:flex;justify-content:space-between;align-items:center}.head h2{font-size:14px;margin:0}.head span{font-size:11px;color:#75818a}
+    table{border-collapse:collapse;width:100%;font-size:12px}th,td{padding:11px 15px;text-align:left;border-bottom:1px solid #edf0f2;white-space:nowrap}th{background:#fafbfc;color:#65727c}.status{font-weight:700}.processing{color:#a26315}.ready{color:#24734f}.waiting{color:#3766ad}
+    .modules{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}.module{border:1px solid #dce2e7;background:#fff;border-radius:6px;padding:14px;min-height:88px}.module h3{font-size:13px;margin:0 0 6px}.module p{font-size:11px;line-height:1.5;color:#71808b;margin:0}
+    @media(max-width:880px){.shell{display:block}aside{display:none}main{padding:20px 13px}.stats{grid-template-columns:repeat(2,1fr)}.modules{grid-template-columns:repeat(2,1fr)}.band{overflow-x:auto}.top{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside><div class="brand">Inventory Operations</div><div class="group">Overview</div><button class="nav active">Dashboard</button><div class="group">Orders and Sales</div><button class="nav">Orders</button><button class="nav">Shipping</button><button class="nav">Statements</button><div class="group">Warehouse</div><button class="nav">Stock In</button><button class="nav">Stock Out</button><button class="nav">Inventory</button><div class="group">Master Data</div><button class="nav">Products</button><button class="nav">Customers</button><button class="nav">Suppliers</button></aside>
+    <main>
+      <header class="top"><div><p class="eyebrow">Production system case study</p><h1>Inventory and Shipping Overview</h1></div><span class="tag">Anonymous offline demo</span></header>
+      <section class="stats"><div class="stat"><div class="label">Pending Orders</div><div class="value">8</div></div><div class="stat"><div class="label">Stock In Today</div><div class="value">12</div></div><div class="stat"><div class="label">Stock Out Today</div><div class="value">9</div></div><div class="stat"><div class="label">Total Items</div><div class="value">126</div></div><div class="stat"><div class="label">Suppliers</div><div class="value">18</div></div></section>
+      <section class="modules"><div class="module"><h3>Order Management</h3><p>Create orders and track processing and shipment status.</p></div><div class="module"><h3>Purchase Orders</h3><p>Coordinate supplier orders, due dates, and receipts.</p></div><div class="module"><h3>Inventory Movements</h3><p>Record stock in, stock out, reasons, and balances.</p></div><div class="module"><h3>Process Tracking</h3><p>Follow production and refurbishment steps.</p></div></section>
+      <section class="band"><div class="head"><h2>Recent Operational Records</h2><span>Fictional data only</span></div><table><thead><tr><th>Reference</th><th>Party</th><th>Item</th><th>Quantity</th><th>Status</th><th>Date</th></tr></thead><tbody><tr><td>SO-DEMO-001</td><td>Demo Customer A</td><td>Demo Product A</td><td>12</td><td class="status processing">Processing</td><td>2026-08-03</td></tr><tr><td>SO-DEMO-002</td><td>Demo Customer B</td><td>Demo Product B</td><td>6</td><td class="status ready">Ready to Ship</td><td>2026-08-05</td></tr><tr><td>PO-DEMO-003</td><td>Demo Supplier C</td><td>Demo Part C</td><td>40</td><td class="status waiting">Awaiting Receipt</td><td>2026-08-07</td></tr></tbody></table></section>
+    </main>
+  </div>
+</body>
+</html>
